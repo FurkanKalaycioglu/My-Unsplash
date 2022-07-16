@@ -2,6 +2,108 @@ import Head from "next/head";
 import Image from "next/image";
 import { FaSearch } from "react-icons/fa";
 export default function Home() {
+  const data = [
+    {
+      id: 1,
+      src: "/images/1.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 2,
+      src: "/images/2.jpg",
+      type: "vertical",
+    },
+    {
+      id: 3,
+      src: "/images/3.jpg",
+      type: "vertical",
+    },
+    {
+      id: 4,
+      src: "/images/4.jpg",
+      type: "vertical",
+    },
+    {
+      id: 5,
+      src: "/images/5.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 6,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 7,
+      src: "/images/6.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 8,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 9,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 10,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 11,
+      src: "/images/1.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 12,
+      src: "/images/2.jpg",
+      type: "vertical",
+    },
+    {
+      id: 13,
+      src: "/images/3.jpg",
+      type: "vertical",
+    },
+    {
+      id: 14,
+      src: "/images/4.jpg",
+      type: "vertical",
+    },
+    {
+      id: 15,
+      src: "/images/5.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 16,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 17,
+      src: "/images/6.jpg",
+      type: "horizontal",
+    },
+    {
+      id: 18,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 19,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+    {
+      id: 20,
+      src: "/images/6.jpg",
+      type: "vertical",
+    },
+  ];
   return (
     <div>
       <Head>
@@ -43,6 +145,25 @@ export default function Home() {
             </div>
           </div>
         </nav>
+
+        <div className="pt-8 pr-16 pl-16">
+          <div class="grid grid-cols-3 gap-8 justify-items-center mx-64">
+            {" "}
+            {/* find something else other than margin for this problem*/}
+            {data.map((item) => (
+              <div
+                class={
+                  "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg object-cover" +
+                  (item.type == "horizontal"
+                    ? " w-[385px] h-[600px] row-span-2"
+                    : " w-[385px] h-[300px]")
+                }
+              >
+                {item.id}
+              </div>
+            ))}
+          </div>
+        </div>
       </main>
     </div>
   );
