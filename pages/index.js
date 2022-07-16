@@ -5,14 +5,15 @@ export default function Home() {
   const data = [
     {
       id: 1,
-      src: "/images/1.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 2,
       src: "/images/2.jpg",
       type: "vertical",
     },
+    {
+      id: 2,
+      src: "/images/1.jpg",
+      type: "horizontal",
+    },
+
     {
       id: 3,
       src: "/images/3.jpg",
@@ -31,13 +32,14 @@ export default function Home() {
     {
       id: 6,
       src: "/images/6.jpg",
-      type: "vertical",
+      type: "horizontal",
     },
     {
       id: 7,
       src: "/images/6.jpg",
-      type: "horizontal",
+      type: "vertical",
     },
+
     {
       id: 8,
       src: "/images/6.jpg",
@@ -147,7 +149,7 @@ export default function Home() {
         </nav>
 
         <div className="pt-8 pr-16 pl-16">
-          <div class="grid grid-cols-3 gap-8 justify-items-center mx-64">
+          <div class="grid grid-cols-3 gap-8 justify-items-center mx-64 ">
             {" "}
             {/* find something else other than margin for this problem*/}
             {data.map((item) => (
@@ -159,7 +161,13 @@ export default function Home() {
                     : " w-[385px] h-[300px]")
                 }
               >
-                {item.id}
+                <Image
+                  src={item.src}
+                  /*if item.type is horizontal*/
+                  width={item.type == "horizontal" ? 385 : 385}
+                  height={item.type == "horizontal" ? 600 : 300}
+                  className="rounded-xl object-cover"
+                />
               </div>
             ))}
           </div>
