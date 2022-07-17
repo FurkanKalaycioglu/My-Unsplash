@@ -1,116 +1,28 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { addImage } from "./api/firebase-config";
 import Modal from "./components/Modal";
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getImage = async () => {
+      const req = await fetch("api/firebase", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await req.json();
+      return data;
+    };
+    getImage().then((data) => {
+      setData(data);
+    });
+  }, []);
 
-  const data = [
-    {
-      id: 1,
-      src: "/images/2.jpg",
-      type: "vertical",
-    },
-    {
-      id: 2,
-      src: "/images/1.jpg",
-      type: "horizontal",
-    },
-
-    {
-      id: 3,
-      src: "/images/3.jpg",
-      type: "vertical",
-    },
-    {
-      id: 4,
-      src: "/images/4.jpg",
-      type: "vertical",
-    },
-    {
-      id: 5,
-      src: "/images/5.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 6,
-      src: "/images/6.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 7,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-
-    {
-      id: 8,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 9,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 10,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 11,
-      src: "/images/1.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 12,
-      src: "/images/2.jpg",
-      type: "vertical",
-    },
-    {
-      id: 13,
-      src: "/images/3.jpg",
-      type: "vertical",
-    },
-    {
-      id: 14,
-      src: "/images/4.jpg",
-      type: "vertical",
-    },
-    {
-      id: 15,
-      src: "/images/5.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 16,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 17,
-      src: "/images/6.jpg",
-      type: "horizontal",
-    },
-    {
-      id: 18,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 19,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-    {
-      id: 20,
-      src: "/images/6.jpg",
-      type: "vertical",
-    },
-  ];
   return (
     <div>
       <Head>
@@ -158,22 +70,19 @@ export default function Home() {
 
         <div className="pt-8 pr-16 pl-16">
           <div className="grid grid-cols-3 gap-8 justify-items-center mx-64 ">
-            {" "}
             {/* find something else other than margin for this problem*/}
             {data.map((item) => (
               <div
                 className={
-                  "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg object-cover" +
-                  (item.type == "horizontal"
+                  "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg relative" +
+                  (Math.floor(Math.random() * 10) % 2 === 0
                     ? " w-[385px] h-[600px] row-span-2"
                     : " w-[385px] h-[300px]")
                 }
               >
                 <Image
-                  src={item.src}
-                  /*if item.type is horizontal*/
-                  width={item.type == "horizontal" ? 385 : 385}
-                  height={item.type == "horizontal" ? 600 : 300}
+                  src={item.url}
+                  layout="fill"
                   className="rounded-xl object-cover"
                 />
               </div>

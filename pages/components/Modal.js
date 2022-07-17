@@ -14,7 +14,6 @@ function Modal({ closeModal }) {
       }),
     });
     const data = await res.json();
-    console.log(data);
     closeModal();
   };
   return (
