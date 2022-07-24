@@ -2,14 +2,34 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { addImage } from "./api/firebase-config";
 import Modal from "./components/Modal";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "./api/firebase-config";
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [imagecount, setImagecount] = useState(0);
   useEffect(() => {
+    const getCount = async () => {
+      const querySnapshot = await getDocs(collection(db, "counter"));
+      const count = querySnapshot.docs.map((doc) => {
+        return {
+          count: doc.data().count,
+        };
+      });
+      console.log(count[0].count);
+      return count;
+    };
+    getCount().then((countt) => {
+      setImagecount(countt[0].count);
+    });
+
+    console.log("imagecount", imagecount);
+    console.log("useEffect");
     const getImage = async () => {
-      const req = await fetch("api/firebase", {
+      const req = await fetch(`api/firebase?limit=9`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +42,18 @@ export default function Home() {
       setData(data);
     });
   }, []);
+  const getNext = async (docID) => {
+    console.log("getNext");
+    const req = await fetch(`api/firebase?limit=9&docID=${docID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
+    const data = await req.json();
+    return data;
+  };
   return (
     <div>
       <Head>
@@ -68,26 +99,58 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="pt-8 pr-16 pl-16">
-          <div className="grid grid-cols-3 gap-8 justify-items-center mx-64 ">
-            {/* find something else other than margin for this problem*/}
-            {data.map((item) => (
-              <div
-                className={
-                  "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg relative" +
-                  (Math.floor(Math.random() * 10) % 2 === 0
-                    ? " w-[385px] h-[600px] row-span-2"
-                    : " w-[385px] h-[300px]")
+        <div className="pt-8 pr-16 pl-16 pb-8">
+          <InfiniteScroll
+            className="grid grid-cols-3 gap-8 justify-items-center mx-64 "
+            dataLength={data.length} //This is important field to render the next data
+            next={() => {
+              getNext(data[data.length - 1].id).then((datay) => {
+                // setData([...data, ...data]);
+                // console.log(data);
+                setData([...data, ...datay]);
+                // console.log(data);
+                console.log("data lenghth", data.length);
+                console.log("image counts", imagecount);
+                if (data.length === imagecount) {
+                  setHasMore(false);
                 }
-              >
-                <Image
-                  src={item.url}
-                  layout="fill"
-                  className="rounded-xl object-cover"
-                />
+              });
+              // console.log("data", data[data.length - 1].id);
+              // console.log(data);
+            }}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
+            {/* find something else other than margin for this problem*/}
+
+            {data.map((item) => (
+              <div className="relative">
+                <div
+                  className={
+                    "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg relative" +
+                    (Math.floor(Math.random() * 10) % 2 === 0
+                      ? " w-[385px] h-[600px] row-span-2"
+                      : " w-[385px] h-[300px]")
+                  }
+                >
+                  <Image
+                    src={item.url}
+                    layout="fill"
+                    className="rounded-xl object-cover text-white"
+                    title={item.label}
+                  />
+                </div>
+                {/* <h2 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-6xl text-white">
+                  hello
+                </h2> */}
               </div>
             ))}
-          </div>
+          </InfiniteScroll>
         </div>
       </main>
     </div>

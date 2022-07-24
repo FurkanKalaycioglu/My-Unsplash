@@ -1,8 +1,17 @@
 import React from "react";
-import { addImage, testImage } from "../api/firebase-config";
+import { increment, doc, updateDoc } from "firebase/firestore";
+import { db } from "../api/firebase-config";
 function Modal({ closeModal }) {
   const sendData = async (event) => {
     event.preventDefault();
+    const updateCounter = async () => {
+      const counterRef = doc(db, "counter", "c");
+      await updateDoc(counterRef, {
+        count: increment(1),
+      });
+    };
+    updateCounter();
+
     const res = await fetch("/api/firebase", {
       method: "POST",
       headers: {
