@@ -19,15 +19,12 @@ export default function Home() {
           count: doc.data().count,
         };
       });
-      console.log(count[0].count);
       return count;
     };
     getCount().then((countt) => {
       setImagecount(countt[0].count);
     });
 
-    console.log("imagecount", imagecount);
-    console.log("useEffect");
     const getImage = async () => {
       const req = await fetch(`api/firebase?limit=9`, {
         method: "GET",
@@ -43,7 +40,6 @@ export default function Home() {
     });
   }, []);
   const getNext = async (docID) => {
-    console.log("getNext");
     const req = await fetch(`api/firebase?limit=9&docID=${docID}`, {
       method: "GET",
       headers: {
@@ -102,21 +98,16 @@ export default function Home() {
         <div className="pt-8 pr-16 pl-16 pb-8">
           <InfiniteScroll
             className="grid grid-cols-3 gap-8 justify-items-center mx-64 "
-            dataLength={data.length} //This is important field to render the next data
+            dataLength={data.length}
             next={() => {
               getNext(data[data.length - 1].id).then((datay) => {
-                // setData([...data, ...data]);
-                // console.log(data);
                 setData([...data, ...datay]);
-                // console.log(data);
-                console.log("data lenghth", data.length);
-                console.log("image counts", imagecount);
+
+                console.log(data);
                 if (data.length === imagecount) {
                   setHasMore(false);
                 }
               });
-              // console.log("data", data[data.length - 1].id);
-              // console.log(data);
             }}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
@@ -129,25 +120,20 @@ export default function Home() {
             {/* find something else other than margin for this problem*/}
 
             {data.map((item) => (
-              <div className="relative">
-                <div
-                  className={
-                    "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg relative" +
-                    (Math.floor(Math.random() * 10) % 2 === 0
-                      ? " w-[385px] h-[600px] row-span-2"
-                      : " w-[385px] h-[300px]")
-                  }
-                >
-                  <Image
-                    src={item.url}
-                    layout="fill"
-                    className="rounded-xl object-cover text-white"
-                    title={item.label}
-                  />
-                </div>
-                {/* <h2 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-6xl text-white">
-                  hello
-                </h2> */}
+              <div
+                className={
+                  "shadow-lg bg-green-100 text-green-500 text-lg font-bold text-center rounded-lg relative" +
+                  (item.createdAt.seconds % 2 === 1
+                    ? " w-[385px] h-[600px] row-span-2"
+                    : " w-[385px] h-[300px]")
+                }
+              >
+                <Image
+                  src={item.url}
+                  layout="fill"
+                  className="rounded-xl object-cover text-white"
+                  title={item.label}
+                />
               </div>
             ))}
           </InfiniteScroll>

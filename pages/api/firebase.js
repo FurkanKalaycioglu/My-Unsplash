@@ -52,6 +52,7 @@ export default async function handler(req, res) {
           label: doc.data().label,
           url: doc.data().url,
           id: doc.id,
+          createdAt: doc.data().createdAt,
         };
       });
       res.status(200).json(data);
@@ -68,6 +69,7 @@ export default async function handler(req, res) {
           label: doc.data().label,
           url: doc.data().url,
           id: doc.id,
+          createdAt: doc.data().createdAt,
         };
       });
       res.status(200).json(data);
