@@ -10,7 +10,7 @@ function ImageGallery(data,
     hasMore,
     setHasMore,
     getNext) {
-
+        /* Sadly there was a problem with api and firebase. I couldn't send delete method to api, will fix it later*/
         const deleteImage = async (id) => {
             console.log(id);
             
