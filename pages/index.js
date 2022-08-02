@@ -2,11 +2,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "./api/firebase-config";
-import Modal from "./components/Modal";
+import Modal from "../components/Modal";
 
-import NavBar from "./components/Navbar";
-import ImageGallery from "./components/ImageGallery";
-import Socials from "./components/Socials";
+import NavBar from "../components/Navbar";
+import ImageGallery from "../components/ImageGallery";
+import Socials from "../components/Socials";
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
