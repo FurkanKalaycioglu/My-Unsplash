@@ -8,23 +8,10 @@ import {
   query,
   startAfter,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "./firebase-config";
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const body = req.body;
-    if (!body.label || !body.url) {
-      return res.status(500).json({ msg: "label or url was not found" });
-    }
-    const docRef = await addDoc(collection(db, "images"), {
-      label: body.label,
-      url: body.url,
-      createdAt: new Date(),
-    });
-    res
-      .status(200)
-      .json({ label: `${body.label}`, url: `${body.url}`, id: `${docRef.id}` });
-  }
   if (req.method === "GET") {
     const qu = req.query;
     if (qu.docID) {
@@ -74,5 +61,22 @@ export default async function handler(req, res) {
       });
       res.status(200).json(data);
     }
+  }
+
+  if (req.method === "POST") {
+    const body = req.body;
+    if (!body.label || !body.url) {
+      return res.status(500).json({ msg: "label or url was not found" });
+    }
+    const docRef = await addDoc(collection(db, "images"), {
+      label: body.label,
+      url: body.url,
+      createdAt: new Date(),
+    });
+    res.status(200).json({
+      label: `${body.label}`,
+      url: `${body.url}`,
+      id: `${docRef.id}`,
+    });
   }
 }

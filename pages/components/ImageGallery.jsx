@@ -1,6 +1,7 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "next/image";
-
+import { increment, doc, updateDoc,deleteDoc } from "firebase/firestore";
+import { db } from "../api/firebase-config";
 
 function ImageGallery(data,
     setData,
@@ -9,6 +10,22 @@ function ImageGallery(data,
     hasMore,
     setHasMore,
     getNext) {
+
+        const deleteImage = async (id) => {
+            console.log(id);
+            
+            const uploadRef = await deleteDoc(doc(db, "images", id));
+            console.log(uploadRef);
+
+            const updateCounter = async () => {
+                const counterRef = doc(db, "counter", "c");
+                await updateDoc(counterRef, {
+                  count: increment(-1),
+                });
+              };
+            updateCounter();
+
+        }
     return (
       <div className="pt-8 pr-16 pl-16 pb-8">
         <InfiniteScroll
@@ -42,6 +59,11 @@ function ImageGallery(data,
               <div className="absolute inset-0 z-10 opacity-0  0 hover:opacity-100 duration-300 ">
                 <div className="bg-black bg-opacity-0 p-4 w-full h-full hover:bg-opacity-50 transition-all duration-500">
                   <button
+                  onClick={() => {
+                    deleteImage(item.id);
+                    
+                  }
+                  }
                     type="button"
                     className="absolute top-4 right-4 px-4 py-1 text-[#EB5757] hover:text-white border border-[#EB5757] hover:bg-[#EB5757] font-medium rounded-3xl text-sm text-center "
                   >
